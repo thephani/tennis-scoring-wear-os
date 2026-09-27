@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Tennis Score — match complete directions</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #10151b; color: #edf2ed; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  .sheet { width: 1560px; height: 650px; display: flex; justify-content: space-around; align-items: center; gap: 24px; padding: 30px 24px; }
+  .option { width: 490px; height: 590px; background: #192128; border: 1px solid #2c3940; border-radius: 30px; display: flex; flex-direction: column; align-items: center; padding: 17px 0 10px; }
+  .title { font-size: 25px; font-weight: 750; letter-spacing: -.03em; line-height: 30px; }
+  .desc { height: 40px; margin-top: 5px; text-align: center; font-size: 15px; color: #a5b2b6; }
+  .bezel { width: 424px; height: 424px; border-radius: 50%; padding: 12px; background: linear-gradient(145deg,#596168,#252b2f 52%,#687077); box-shadow: 0 15px 30px #0008, inset 0 0 0 2px #8d9499; }
+  .watch { width: 400px; height: 400px; border-radius: 50%; overflow: hidden; position: relative; box-shadow: inset 0 0 0 3px #070d0f; }
+  .watch * { position: absolute; }
+  .center { left: 0; right: 0; text-align: center; }
+  .hint { width: 100%; margin-top: 13px; text-align: center; color: #95a5aa; font-size: 14px; }
+  .button { text-align: center; font-weight: 800; letter-spacing: .015em; }
+  .a { background: radial-gradient(circle at 50% 25%, #1a594c, #0c2426 68%); }
+  .a .ring { inset: 25px; border: 1px solid #5fa38455; border-radius: 50%; }
+  .a .eyebrow { top: 65px; color: #c5e6bd; font-size: 16px; letter-spacing: .13em; font-weight: 760; }
+  .a .winner { top: 101px; color: #e7ffa8; font-size: 42px; font-weight: 850; }
+  .a .score { top: 161px; left: 100px; width: 200px; height: 47px; background: #0a2c2a; border: 1px solid #68ae8c; border-radius: 24px; text-align: center; line-height: 45px; font-size: 25px; font-weight: 750; }
+  .a .new { top: 222px; left: 72px; width: 256px; height: 52px; border-radius: 28px; background: #d9f6a7; color: #173c2f; line-height: 52px; font-size: 22px; }
+  .a .undo { top: 283px; left: 86px; width: 228px; height: 45px; border-radius: 24px; border: 1px solid #b9e9d4; color: #f0f8ee; line-height: 43px; font-size: 17px; }
+  .a .home { top: 335px; left: 139px; width: 122px; height: 35px; border-radius: 18px; background: #2b5351; line-height: 35px; font-size: 16px; }
+  .b { background: radial-gradient(circle at 50% 50%, #202526, #090d0f 68%); }
+  .b .accentline { top: 61px; left: 145px; width: 110px; height: 4px; border-radius: 2px; background: #9ce9a9; }
+  .b .eyebrow { top: 78px; color: #b5c7c3; font-size: 16px; letter-spacing: .13em; font-weight: 750; }
+  .b .winner { top: 112px; color: #a1efaf; font-size: 44px; font-weight: 850; }
+  .b .setlabel { top: 171px; color: #93a5a2; font-size: 14px; letter-spacing: .12em; font-weight: 750; }
+  .b .score { top: 188px; color: #f7faf4; font-size: 25px; font-weight: 780; }
+  .b .new { top: 231px; left: 70px; width: 260px; height: 52px; border-radius: 27px; background: #9ce9a9; color: #10221c; line-height: 52px; font-size: 22px; }
+  .b .undo { top: 289px; left: 81px; width: 238px; height: 44px; border-radius: 23px; background: #283034; color: #f4b98d; line-height: 44px; font-size: 17px; }
+  .b .home { top: 341px; left: 147px; width: 106px; height: 30px; color: #c4d0cd; line-height: 30px; font-size: 16px; }
+  .c { background: #102c29; }
+  .c .court { left: 65px; top: 53px; width: 270px; height: 282px; border: 1px solid #55bfa269; border-radius: 13px; }
+  .c .line { left: 200px; top: 53px; height: 282px; border-left: 1px solid #55bfa269; }
+  .c .eyebrow { top: 58px; color: #c2e5c3; font-size: 16px; letter-spacing: .12em; font-weight: 780; }
+  .c .winner { top: 88px; color: #e7f7ca; font-size: 37px; font-weight: 850; }
+  .c .setcard { top: 139px; left: 102px; width: 196px; height: 84px; background: #dff5c8; border-radius: 19px; color: #1b3a30; display: grid; grid-template-columns: 69px 44px 44px; grid-template-rows: repeat(2, 34px); align-items: center; justify-content: center; text-align: center; padding: 8px 2px; font-size: 21px; font-weight: 830; }
+  .c .setcard span { position: static; }
+  .c .setcard span:nth-child(3n+1) { font-size: 16px; text-align: left; }
+  .c .new { top: 234px; left: 75px; width: 250px; height: 51px; border-radius: 26px; background: #b8e79f; color: #173b2d; line-height: 51px; font-size: 22px; }
+  .c .undo { top: 290px; left: 85px; width: 230px; height: 44px; border-radius: 23px; background: #294643; border: 1px solid #7cbca6; line-height: 42px; font-size: 17px; }
+  .c .home { top: 341px; left: 147px; width: 106px; height: 30px; color: #daeee1; line-height: 30px; font-size: 16px; }
+</style>
+<div class="sheet">
+  <section class="option">
+    <div class="title">A · Court Split</div><div class="desc">Victory score centered; all actions inside the circle</div>
+    <div class="bezel"><div class="watch a">
+      <div class="ring"></div><div class="center eyebrow">MATCH COMPLETE</div><div class="center winner">YOU WIN</div><div class="score">6–1 &nbsp; 6–0</div>
+      <div class="button new">NEW MATCH</div><div class="button undo">↶ &nbsp; UNDO LAST POINT</div><div class="button home">HOME</div>
+    </div></div><div class="hint">Bright primary action, clear correction</div>
+  </section>
+  <section class="option">
+    <div class="title">B · Bold Contrast</div><div class="desc">Strong winner statement; simple action hierarchy</div>
+    <div class="bezel"><div class="watch b">
+      <div class="accentline"></div><div class="center eyebrow">MATCH COMPLETE</div><div class="center winner">YOU WIN</div>
+      <div class="center setlabel">FINAL SETS</div><div class="center score">6–1 &nbsp; 6–0</div>
+      <div class="button new">NEW MATCH</div><div class="button undo">↶ &nbsp; UNDO LAST POINT</div><div class="button home">HOME</div>
+    </div></div><div class="hint">Matches the high-contrast scoring design</div>
+  </section>
+  <section class="option">
+    <div class="title">C · Court Cards</div><div class="desc">Compact result card; tennis-court background</div>
+    <div class="bezel"><div class="watch c">
+      <div class="court"></div><div class="line"></div><div class="center eyebrow">MATCH COMPLETE</div><div class="center winner">YOU WIN</div>
+      <div class="setcard"><span>YOU</span><span>6</span><span>6</span><span>OPP</span><span>1</span><span>0</span></div>
+      <div class="button new">NEW MATCH</div><div class="button undo">↶ &nbsp; UNDO LAST POINT</div><div class="button home">HOME</div>
+    </div></div><div class="hint">Makes the final set scores explicit</div>
+  </section>
+</div>
+</html>

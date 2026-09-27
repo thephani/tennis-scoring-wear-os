@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1110" viewBox="0 0 1900 1110">
+  <defs>
+    <linearGradient id="metal" x2=".8" y2="1"><stop stop-color="#737a7e"/><stop offset=".45" stop-color="#343a3d"/><stop offset="1" stop-color="#555b5f"/></linearGradient>
+    <radialGradient id="face"><stop stop-color="#101416"/><stop offset="1" stop-color="#050708"/></radialGradient>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+      .title { fill:#f2f4f2; font-size:25px; font-weight:750 }
+      .sub { fill:#a5b2b6; font-size:15px }
+      .quiet { fill:#b5c7c3; font-size:13px; font-weight:750; letter-spacing:2px }
+      .white { fill:#f7f8f6 }
+      .green { fill:#9ce65d }
+      .small { font-size:18px; font-weight:750 }
+      .big { font-size:105px; font-weight:850; letter-spacing:-4px }
+      .btntext { font-size:27px; font-weight:850 }
+      .tap { font-size:11px; font-weight:750; letter-spacing:1.6px }
+    </style>
+  </defs>
+  <rect width="1900" height="1110" fill="#10151b"/>
+  <text x="42" y="60" fill="#f2f4f2" font-size="32" font-weight="750">Tennis score · screen options</text>
+  <text x="42" y="93" class="sub">Same match state in each: set 1 of 3 · YOU serves · games 3–2 · points 30–0</text>
+
+  <!-- A: Close to the reference: large score card, vivid paired buttons -->
+  <g transform="translate(32 132)">
+    <rect width="445" height="940" rx="26" fill="#192128" stroke="#2c3940"/>
+    <text x="222" y="42" text-anchor="middle" class="title">A · Big score card</text>
+    <text x="222" y="68" text-anchor="middle" class="sub">Closest to your reference</text>
+    <circle cx="222" cy="318" r="238" fill="url(#metal)" stroke="#899196" stroke-width="2"/>
+    <circle cx="222" cy="318" r="226" fill="url(#face)" stroke="#060a0b" stroke-width="3"/>
+    <text x="222" y="139" text-anchor="middle" class="quiet">—  SET 1 OF 3  —</text>
+    <circle cx="96" cy="181" r="10" fill="#b8ef67"/><path d="M90 173q8 8 1 16M102 174q-8 7-1 16" fill="none" stroke="#eff9d5" stroke-width="1.5"/>
+    <text x="119" y="189" class="white small">YOU  3</text><path d="M222 164v43" stroke="#657074" stroke-width="2"/>
+    <text x="252" y="189" class="white small">OPP  2</text>
+    <rect x="70" y="227" width="304" height="172" rx="31" fill="#202124"/>
+    <text x="222" y="344" text-anchor="middle" class="white big">30–0</text>
+    <rect x="76" y="415" width="137" height="91" rx="22" fill="#86d626"/>
+    <text x="144" y="457" text-anchor="middle" fill="#11220a" class="btntext">YOU +</text><text x="144" y="481" text-anchor="middle" fill="#264313" class="tap">TAP TO SCORE</text>
+    <rect x="231" y="415" width="137" height="91" rx="22" fill="#ff8500"/>
+    <text x="299" y="457" text-anchor="middle" fill="#2b1704" class="btntext">OPP +</text><text x="299" y="481" text-anchor="middle" fill="#4b2b0c" class="tap">TAP TO SCORE</text>
+    <rect x="147" y="541" width="150" height="47" rx="24" fill="none" stroke="#555c60" stroke-width="2"/>
+    <text x="222" y="572" text-anchor="middle" class="white" font-size="19" font-weight="750">↶  UNDO</text>
+    <text x="222" y="627" text-anchor="middle" class="sub">Strongest score emphasis</text>
+  </g>
+
+  <!-- B: Score pill overlaps buttons, echoing the current app treatment -->
+  <g transform="translate(507 132)">
+    <rect width="445" height="940" rx="26" fill="#192128" stroke="#2c3940"/>
+    <text x="222" y="42" text-anchor="middle" class="title">B · Floating score pill</text>
+    <text x="222" y="68" text-anchor="middle" class="sub">Keeps buttons large and close</text>
+    <circle cx="222" cy="318" r="238" fill="url(#metal)" stroke="#899196" stroke-width="2"/>
+    <circle cx="222" cy="318" r="226" fill="url(#face)" stroke="#060a0b" stroke-width="3"/>
+    <text x="222" y="139" text-anchor="middle" class="quiet">SET 1 OF 3</text>
+    <circle cx="96" cy="181" r="10" fill="#b8ef67"/><path d="M90 173q8 8 1 16M102 174q-8 7-1 16" fill="none" stroke="#eff9d5" stroke-width="1.5"/>
+    <text x="119" y="189" class="white small">YOU  3</text><path d="M222 164v43" stroke="#657074" stroke-width="2"/>
+    <text x="252" y="189" class="white small">OPP  2</text>
+    <rect x="70" y="225" width="304" height="151" rx="29" fill="#86d626"/>
+    <text x="222" y="287" text-anchor="middle" fill="#14220e" font-size="28" font-weight="850">YOU  +</text><text x="222" y="319" text-anchor="middle" fill="#294817" class="tap">TAP TO SCORE</text>
+    <rect x="70" y="394" width="304" height="151" rx="29" fill="#ff8500"/>
+    <text x="222" y="484" text-anchor="middle" fill="#2b1704" font-size="28" font-weight="850">OPP  +</text><text x="222" y="516" text-anchor="middle" fill="#4b2b0c" class="tap">TAP TO SCORE</text>
+    <rect x="143" y="352" width="158" height="62" rx="31" fill="#161b1d" stroke="#778083" stroke-width="2"/>
+    <text x="222" y="394" text-anchor="middle" class="white" font-size="39" font-weight="850">30–0</text>
+    <rect x="147" y="565" width="150" height="47" rx="24" fill="none" stroke="#555c60" stroke-width="2"/>
+    <text x="222" y="596" text-anchor="middle" class="white" font-size="19" font-weight="750">↶  UNDO</text>
+    <text x="222" y="647" text-anchor="middle" class="sub">Most similar to the current app</text>
+  </g>
+
+  <!-- C: Score by each player's side with restrained color -->
+  <g transform="translate(982 132)">
+    <rect width="445" height="940" rx="26" fill="#192128" stroke="#2c3940"/>
+    <text x="222" y="42" text-anchor="middle" class="title">C · Split score</text>
+    <text x="222" y="68" text-anchor="middle" class="sub">Color links each score to its control</text>
+    <circle cx="222" cy="318" r="238" fill="url(#metal)" stroke="#899196" stroke-width="2"/>
+    <circle cx="222" cy="318" r="226" fill="url(#face)" stroke="#060a0b" stroke-width="3"/>
+    <text x="222" y="139" text-anchor="middle" class="quiet">SET 1 OF 3</text>
+    <text x="89" y="190" class="green small">YOU  3</text><circle cx="75" cy="182" r="8" fill="#b8ef67"/><path d="M71 176q6 6 1 12M79 176q-6 6-1 12" fill="none" stroke="#eff9d5"/>
+    <text x="357" y="190" text-anchor="end" class="white small">OPP  2</text>
+    <rect x="72" y="229" width="300" height="128" rx="26" fill="#121719" stroke="#668e3e" stroke-width="2"/>
+    <text x="222" y="319" text-anchor="middle" fill="#c5f184" font-size="80" font-weight="850">30–0</text>
+    <rect x="72" y="383" width="143" height="114" rx="25" fill="#203019" stroke="#86d626" stroke-width="2"/>
+    <text x="143" y="433" text-anchor="middle" fill="#a6e96a" font-size="27" font-weight="850">YOU +</text><text x="143" y="465" text-anchor="middle" fill="#c3d2b0" class="tap">SCORE</text>
+    <rect x="229" y="383" width="143" height="114" rx="25" fill="#362416" stroke="#ff8500" stroke-width="2"/>
+    <text x="300" y="433" text-anchor="middle" fill="#ffb259" font-size="27" font-weight="850">OPP +</text><text x="300" y="465" text-anchor="middle" fill="#d6c2ad" class="tap">SCORE</text>
+    <rect x="147" y="541" width="150" height="47" rx="24" fill="none" stroke="#555c60" stroke-width="2"/>
+    <text x="222" y="572" text-anchor="middle" class="white" font-size="19" font-weight="750">↶  UNDO</text>
+    <text x="222" y="627" text-anchor="middle" class="sub">Quieter color, clear association</text>
+  </g>
+
+  <!-- D: High legibility, white score in a framed court-like center -->
+  <g transform="translate(1457 132)">
+    <rect width="445" height="940" rx="26" fill="#192128" stroke="#2c3940"/>
+    <text x="222" y="42" text-anchor="middle" class="title">D · Court frame</text>
+    <text x="222" y="68" text-anchor="middle" class="sub">Subtle court lines and compact controls</text>
+    <circle cx="222" cy="318" r="238" fill="url(#metal)" stroke="#899196" stroke-width="2"/>
+    <circle cx="222" cy="318" r="226" fill="url(#face)" stroke="#060a0b" stroke-width="3"/>
+    <text x="222" y="139" text-anchor="middle" class="quiet">—  SET 1 OF 3  —</text>
+    <circle cx="96" cy="181" r="10" fill="#b8ef67"/><path d="M90 173q8 8 1 16M102 174q-8 7-1 16" fill="none" stroke="#eff9d5" stroke-width="1.5"/>
+    <text x="119" y="189" class="white small">YOU  3</text><text x="326" y="189" class="white small">OPP  2</text>
+    <rect x="75" y="222" width="294" height="165" rx="20" fill="none" stroke="#49645a" stroke-width="2"/>
+    <path d="M222 222v165M75 305h294" stroke="#49645a" stroke-width="1.5"/>
+    <text x="222" y="326" text-anchor="middle" class="white" font-size="76" font-weight="850">30–0</text>
+    <rect x="77" y="414" width="137" height="83" rx="20" fill="#86d626"/>
+    <text x="145" y="454" text-anchor="middle" fill="#11220a" font-size="26" font-weight="850">YOU +</text><text x="145" y="478" text-anchor="middle" fill="#264313" class="tap">TAP TO SCORE</text>
+    <rect x="230" y="414" width="137" height="83" rx="20" fill="#ff8500"/>
+    <text x="298" y="454" text-anchor="middle" fill="#2b1704" font-size="26" font-weight="850">OPP +</text><text x="298" y="478" text-anchor="middle" fill="#4b2b0c" class="tap">TAP TO SCORE</text>
+    <rect x="147" y="541" width="150" height="47" rx="24" fill="none" stroke="#555c60" stroke-width="2"/>
+    <text x="222" y="572" text-anchor="middle" class="white" font-size="19" font-weight="750">↶  UNDO</text>
+    <text x="222" y="627" text-anchor="middle" class="sub">Tennis detail, still score-first</text>
+  </g>
+</svg>

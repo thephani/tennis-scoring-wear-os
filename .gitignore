@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear
@@ -25,3 +26,29 @@ replay_pid*
 
 # Kotlin Gradle plugin data, see https://kotlinlang.org/docs/whatsnew20.html#new-directory-for-kotlin-data-in-gradle-projects
 .kotlin/
+
+# Android Studio and local SDK configuration
+.idea/
+*.iml
+local.properties
+.externalNativeBuild/
+.cxx/
+captures/
+
+# Gradle and Android build output
+.gradle/
+.gradle-user/
+build/
+**/build/
+
+# Local machine files
+.DS_Store
+Thumbs.db
+
+# Release signing material
+*.jks
+*.keystore
+*.p12
+*.pem
+keystore.properties
+signing.properties

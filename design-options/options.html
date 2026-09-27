@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Tennis Score — UI directions</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #10151b; color: #edf2ed; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  .sheet { width: 1560px; height: 650px; display: flex; justify-content: space-around; align-items: center; gap: 24px; padding: 30px 24px; }
+  .option { width: 490px; height: 590px; background: #192128; border: 1px solid #2c3940; border-radius: 30px; display: flex; flex-direction: column; align-items: center; padding: 17px 0 10px; }
+  .title { font-size: 25px; font-weight: 750; letter-spacing: -.03em; line-height: 30px; }
+  .desc { height: 40px; margin-top: 5px; text-align: center; font-size: 15px; color: #a5b2b6; }
+  .bezel { width: 424px; height: 424px; border-radius: 50%; padding: 12px; background: linear-gradient(145deg,#596168,#252b2f 52%,#687077); box-shadow: 0 15px 30px #0008, inset 0 0 0 2px #8d9499; }
+  .watch { width: 400px; height: 400px; border-radius: 50%; overflow: hidden; position: relative; background: #071210; box-shadow: inset 0 0 0 3px #070d0f; }
+  .watch * { position: absolute; }
+  .label { font-weight: 750; letter-spacing: .03em; }
+  .quiet { font-size: 12px; letter-spacing: .15em; font-weight: 700; }
+  .center { left: 0; right: 0; text-align: center; }
+  .hint { width: 100%; margin-top: 13px; text-align: center; color: #95a5aa; font-size: 14px; }
+  /* A — court split */
+  .a .upper { inset: 0 0 50%; background: linear-gradient(145deg,#126651,#134b42); }
+  .a .lower { inset: 50% 0 0; background: linear-gradient(155deg,#193955,#14273f); }
+  .a .sets { top: 53px; left: 85px; width: 230px; height: 96px; border-radius: 17px; background: #082a288c; padding: 9px 15px; display: grid; grid-template-columns: 58px repeat(3, 1fr); grid-template-rows: repeat(3,25px); align-items: center; text-align: center; font-size: 20px; font-weight: 700; }
+  .a .sets span { position: static; }
+  .a .sets span:nth-child(-n+4) { color: #b7edb2; font-size: 14px; letter-spacing: .1em; }
+  .a .you { top: 145px; font-size: 27px; color: #e0ff9d; }
+  .a .opp { top: 265px; font-size: 25px; color: #e6f0fc; }
+  .a .score { top: 184px; left: 111px; width: 178px; height: 65px; border-radius: 34px; background: #091a1f; border: 2px solid #89d5b2; text-align: center; font-size: 39px; font-weight: 800; line-height: 59px; box-shadow: 0 5px 15px #0007; }
+  .a .undo { top: 326px; left: 128px; width: 144px; height: 45px; border-radius: 24px; background: #d7e5e4; color: #17282c; text-align: center; line-height: 45px; font-size: 18px; font-weight: 800; }
+  /* B — big score */
+  .b { background: radial-gradient(circle at 50% 50%, #1b2023, #080c0e 72%); }
+  .b .header { top: 56px; color: #9caeb2; font-size: 15px; letter-spacing: .11em; }
+  .b .setrow { top: 81px; left: 78px; width: 244px; display: flex; justify-content: space-between; font-size: 17px; font-weight: 700; }
+  .b .setrow span { position: static; }
+  .b .youzone { top: 121px; left: 52px; width: 296px; height: 87px; border-radius: 36px 36px 20px 20px; background: #93e7a6; color: #10221c; box-shadow: 0 0 25px #75e9a133; }
+  .b .oppzone { top: 220px; left: 52px; width: 296px; height: 87px; border-radius: 20px 20px 36px 36px; background: #f7b986; color: #281a15; box-shadow: 0 0 25px #f7b98622; }
+  .b .zoneName { width: 100%; text-align: center; top: 17px; font-size: 28px; font-weight: 850; }
+  .b .zoneDetail { width: 100%; text-align: center; top: 55px; font-size: 12px; font-weight: 750; letter-spacing: .08em; }
+  .b .game { top: 195px; left: 119px; width: 162px; height: 38px; border-radius: 20px; background: #11171a; border: 1px solid #6d7778; text-align: center; line-height: 34px; font-size: 25px; font-weight: 800; color: #f9faf2; z-index: 2; }
+  .b .undo { top: 325px; left: 136px; width: 128px; height: 43px; border-radius: 22px; border: 1px solid #9aa9ad; text-align: center; line-height: 41px; font-size: 17px; font-weight: 750; }
+  /* C — court lines */
+  .c { background: #102c29; }
+  .c .courtline { border: 1px solid #4bb69b66; left: 65px; top: 60px; width: 270px; height: 270px; border-radius: 14px; }
+  .c .courtline2 { border-left: 1px solid #4bb69b66; left: 200px; top: 60px; height: 270px; }
+  .c .header { top: 53px; color: #aad8ca; font-size: 15px; letter-spacing: .15em; }
+  .c .setscore { top: 77px; font-size: 23px; font-weight: 780; }
+  .c .setscore em { position: static; font-style: normal; color: #afe7a7; }
+  .c .cardyou { top: 123px; left: 62px; width: 276px; height: 85px; border-radius: 24px; background: #dcf4c2; color: #113628; box-shadow: 0 7px 15px #0005; }
+  .c .cardopp { top: 220px; left: 62px; width: 276px; height: 85px; border-radius: 24px; background: #263e43; color: #f5f6eb; border: 1px solid #5c807f; box-shadow: 0 7px 15px #0005; }
+  .c .who { left: 20px; top: 16px; font-size: 22px; font-weight: 800; }
+  .c .point { right: 20px; top: 8px; font-size: 46px; font-weight: 850; }
+  .c .tap { left: 20px; bottom: 13px; font-size: 11px; font-weight: 750; letter-spacing: .1em; }
+  .c .undo { top: 325px; left: 135px; width: 130px; height: 44px; border-radius: 23px; background: #102c29; border: 1px solid #b1dfcb; color: #e1f6e6; text-align: center; line-height: 42px; font-size: 17px; font-weight: 780; }
+</style>
+<div class="sheet">
+  <section class="option">
+    <div class="title">A · Court Split</div><div class="desc">Two clear scoring halves; familiar at a glance</div>
+    <div class="bezel"><div class="watch a">
+      <div class="upper"></div><div class="lower"></div>
+      <div class="sets"><span></span><span>1</span><span>2</span><span>3</span><span>YOU</span><span>6</span><span>3</span><span>·</span><span>OPP</span><span>4</span><span>2</span><span>·</span></div>
+      <div class="center label you">+ YOU</div><div class="score">30–15</div><div class="center label opp">+ OPPONENT</div><div class="undo">↶ &nbsp; UNDO</div>
+    </div></div><div class="hint">Tap top / bottom · undo below</div>
+  </section>
+  <section class="option">
+    <div class="title">B · Bold Contrast</div><div class="desc">Largest touch zones and strongest color cues</div>
+    <div class="bezel"><div class="watch b">
+      <div class="center header">BEST OF 3 · SET 2</div><div class="setrow"><span>YOU&nbsp; 6 · 3</span><span>OPP&nbsp; 4 · 2</span></div>
+      <div class="youzone"><div class="zoneName">YOU &nbsp; +</div><div class="zoneDetail">TAP TO SCORE</div></div>
+      <div class="game">30–15</div>
+      <div class="oppzone"><div class="zoneName">OPP &nbsp; +</div><div class="zoneDetail">TAP TO SCORE</div></div>
+      <div class="undo">↶ &nbsp; UNDO</div>
+    </div></div><div class="hint">Bright targets for quick glances</div>
+  </section>
+  <section class="option">
+    <div class="title">C · Court Cards</div><div class="desc">Player points up front; subtle tennis-court detail</div>
+    <div class="bezel"><div class="watch c">
+      <div class="courtline"></div><div class="courtline2"></div>
+      <div class="center header">SET 2 OF 3</div><div class="center setscore">SETS&nbsp; <em>6–4</em> &nbsp; GAMES&nbsp; <em>3–2</em></div>
+      <div class="cardyou"><div class="who">YOU</div><div class="point">30</div><div class="tap">TAP TO SCORE</div></div>
+      <div class="cardopp"><div class="who">OPP</div><div class="point">15</div><div class="tap">TAP TO SCORE</div></div>
+      <div class="undo">↶ &nbsp; UNDO</div>
+    </div></div><div class="hint">Direct comparison of each player</div>
+  </section>
+</div>
+</html>

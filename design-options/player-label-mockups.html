@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Tennis Score — player label mockups</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #10151b; color: #edf2ed; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; }
+  .sheet { width: 1740px; height: 1040px; padding: 38px 42px; }
+  h1 { margin: 0; font-size: 32px; letter-spacing: -.03em; }
+  .intro { margin: 8px 0 30px; color: #a5b2b6; font-size: 17px; }
+  .options { display: flex; gap: 24px; }
+  .option { width: 536px; height: 900px; border-radius: 28px; border: 1px solid #2c3940; background: #192128; display: flex; flex-direction: column; align-items: center; padding: 24px 22px; }
+  .option h2 { margin: 0; font-size: 25px; }
+  .desc { margin: 6px 0 18px; color: #a5b2b6; font-size: 15px; }
+  .bezel { width: 510px; height: 510px; border-radius: 50%; padding: 12px; background: linear-gradient(145deg,#596168,#252b2f 52%,#687077); box-shadow: 0 15px 30px #0008, inset 0 0 0 2px #8d9499; }
+  .watch { width: 486px; height: 486px; border-radius: 50%; overflow: hidden; position: relative; background: radial-gradient(circle at 50% 50%, #11191b, #080c0e 72%); box-shadow: inset 0 0 0 3px #070d0f; }
+  .watch * { position: absolute; }
+  .center { left: 0; right: 0; text-align: center; }
+  .header { top: 55px; color: #b5c7c3; font-size: 15px; letter-spacing: .12em; font-weight: 750; }
+  .setrow { top: 84px; left: 86px; width: 314px; display: flex; justify-content: space-between; font-size: 20px; font-weight: 800; }
+  .setrow span { position: static; }
+  .server { display: inline-flex; align-items: center; gap: 8px; }
+  .ball { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: #b8ef67; box-shadow: inset -2px -2px 0 #739f33; }
+  .zone { left: 62px; width: 362px; height: 94px; border-radius: 38px; text-align: center; color: #10221c; box-shadow: 0 0 26px #75e9a122; }
+  .you { top: 124px; background: #93e7a6; }
+  .opp { top: 241px; background: #f7b986; color: #281a15; }
+  .zoneName { top: 15px; width: 100%; font-size: 31px; font-weight: 850; }
+  .zoneHint { top: 57px; width: 100%; font-size: 12px; font-weight: 750; letter-spacing: .08em; }
+  .game { z-index: 2; top: 211px; left: 152px; width: 182px; height: 45px; border-radius: 24px; background: #11171a; border: 1px solid #6d7778; text-align: center; line-height: 42px; font-size: 27px; font-weight: 850; color: #f9faf2; }
+  .undo { top: 367px; left: 164px; width: 158px; height: 46px; border-radius: 24px; border: 1px solid #9aa9ad; text-align: center; line-height: 44px; font-size: 17px; font-weight: 750; color: #f4f7ef; }
+  .settings { margin-top: 20px; width: 100%; border-radius: 18px; background: #11191e; border: 1px solid #33434a; padding: 18px 20px; }
+  .settings-title { color: #8fa29f; font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+  .pair { margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .label { min-width: 172px; text-align: center; border-radius: 14px; padding: 13px 10px; font-size: 17px; font-weight: 800; color: #11231d; background: #93e7a6; }
+  .label.second { background: #f7b986; color: #281a15; }
+  .vs { color: #a5b2b6; font-size: 13px; font-weight: 800; }
+  .selected { margin-top: 12px; text-align: center; color: #b5c7c3; font-size: 14px; }
+  .selected strong { color: #a1efaf; }
+  .note { margin-top: 14px; color: #94a4a9; font-size: 13px; text-align: center; }
+</style>
+<div class="sheet">
+  <h1>Player labels</h1>
+  <div class="intro">Same scoring screen in all three. Pick the player names you want to see on the scoreboard and score buttons.</div>
+  <div class="options">
+    <section class="option">
+      <h2>A · You / Opp</h2><div class="desc">Personal, clear for solo play</div>
+      <div class="bezel"><div class="watch">
+        <div class="center header">BEST OF 3 · SET 2</div>
+        <div class="setrow"><span class="server"><i class="ball"></i>YOU&nbsp; 3</span><span>OPP&nbsp; 2</span></div>
+        <div class="zone you"><div class="zoneName">YOU &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="game">30–0</div>
+        <div class="zone opp"><div class="zoneName">OPP &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="undo">↶ &nbsp; UNDO</div>
+      </div></div>
+      <div class="settings"><div class="settings-title">SETTINGS · PLAYER LABELS</div><div class="pair"><div class="label">YOU</div><div class="vs">VS</div><div class="label second">OPP</div></div><div class="selected">Selected: <strong>You / Opp</strong></div></div>
+      <div class="note">Keeps today’s familiar labels</div>
+    </section>
+    <section class="option">
+      <h2>B · Home / Visitor</h2><div class="desc">Neutral labels for two-sided matches</div>
+      <div class="bezel"><div class="watch">
+        <div class="center header">BEST OF 3 · SET 2</div>
+        <div class="setrow"><span class="server"><i class="ball"></i>HOME&nbsp; 3</span><span>VISITOR&nbsp; 2</span></div>
+        <div class="zone you"><div class="zoneName">HOME &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="game">30–0</div>
+        <div class="zone opp"><div class="zoneName">VISITOR &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="undo">↶ &nbsp; UNDO</div>
+      </div></div>
+      <div class="settings"><div class="settings-title">SETTINGS · PLAYER LABELS</div><div class="pair"><div class="label">HOME</div><div class="vs">VS</div><div class="label second">VISITOR</div></div><div class="selected">Selected: <strong>Home / Visitor</strong></div></div>
+      <div class="note">Good for club or court-side scoring</div>
+    </section>
+    <section class="option">
+      <h2>C · A / B</h2><div class="desc">Compact and easy to scan</div>
+      <div class="bezel"><div class="watch">
+        <div class="center header">BEST OF 3 · SET 2</div>
+        <div class="setrow"><span class="server"><i class="ball"></i>A&nbsp; 3</span><span>B&nbsp; 2</span></div>
+        <div class="zone you"><div class="zoneName">A &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="game">30–0</div>
+        <div class="zone opp"><div class="zoneName">B &nbsp; +</div><div class="zoneHint">TAP TO SCORE</div></div>
+        <div class="undo">↶ &nbsp; UNDO</div>
+      </div></div>
+      <div class="settings"><div class="settings-title">SETTINGS · PLAYER LABELS</div><div class="pair"><div class="label">A</div><div class="vs">VS</div><div class="label second">B</div></div><div class="selected">Selected: <strong>A / B</strong></div></div>
+      <div class="note">Short labels leave more room on screen</div>
+    </section>
+  </div>
+</div>
+</html>

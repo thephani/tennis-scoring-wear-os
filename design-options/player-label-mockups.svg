@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1740" height="1040" viewBox="0 0 1740 1040">
+  <defs>
+    <linearGradient id="bezel" x2="1" y2="1"><stop stop-color="#596168"/><stop offset=".52" stop-color="#252b2f"/><stop offset="1" stop-color="#687077"/></linearGradient>
+    <radialGradient id="face"><stop stop-color="#11191b"/><stop offset="1" stop-color="#080c0e"/></radialGradient>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+      .main { fill: #edf2ed; font-weight: 750; }
+      .muted { fill: #a5b2b6; }
+      .tiny { fill: #b5c7c3; font-weight: 750; letter-spacing: 2px; }
+      .score { fill: #f9faf2; font-size: 26px; font-weight: 850; }
+    </style>
+  </defs>
+  <rect width="1740" height="1040" fill="#10151b"/>
+  <text x="42" y="66" class="main" font-size="32">Player labels</text>
+  <text x="42" y="101" class="muted" font-size="17">Same scoring screen in all three. Pick the player names for the scoreboard and score buttons.</text>
+
+  <!-- Three comparison cards -->
+  <g transform="translate(42 130)">
+    <rect width="536" height="870" rx="28" fill="#192128" stroke="#2c3940"/>
+    <text x="268" y="48" text-anchor="middle" class="main" font-size="25">A · You / Opp</text>
+    <text x="268" y="78" text-anchor="middle" class="muted" font-size="15">Personal, clear for solo play</text>
+    <use href="#watch"/>
+    <g transform="translate(13 98)">
+      <circle cx="255" cy="255" r="255" fill="url(#bezel)" stroke="#90999e" stroke-width="2"/>
+      <circle cx="255" cy="255" r="241" fill="url(#face)" stroke="#070d0f" stroke-width="3"/>
+      <text x="255" y="95" text-anchor="middle" class="tiny" font-size="14">BEST OF 3 · SET 2</text>
+      <circle cx="120" cy="126" r="9" fill="#b8ef67"/>
+      <text x="139" y="133" class="main" font-size="20">YOU  3</text>
+      <text x="389" y="133" text-anchor="end" class="main" font-size="20">OPP  2</text>
+      <rect x="76" y="147" width="358" height="92" rx="38" fill="#93e7a6"/>
+      <text x="255" y="187" text-anchor="middle" fill="#10221c" font-size="30" font-weight="850">YOU  +</text>
+      <text x="255" y="218" text-anchor="middle" fill="#234337" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="162" y="226" width="186" height="48" rx="24" fill="#11171a" stroke="#6d7778"/>
+      <text x="255" y="259" text-anchor="middle" class="score">30–0</text>
+      <rect x="76" y="262" width="358" height="92" rx="38" fill="#f7b986"/>
+      <text x="255" y="302" text-anchor="middle" fill="#281a15" font-size="30" font-weight="850">OPP  +</text>
+      <text x="255" y="333" text-anchor="middle" fill="#4b3023" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="178" y="371" width="154" height="45" rx="23" fill="none" stroke="#9aa9ad"/>
+      <text x="255" y="400" text-anchor="middle" class="main" font-size="17" font-weight="750">↶  UNDO</text>
+    </g>
+    <rect x="27" y="630" width="482" height="150" rx="18" fill="#11191e" stroke="#33434a"/>
+    <text x="50" y="660" fill="#8fa29f" font-size="12" font-weight="800" letter-spacing="2">SETTINGS · PLAYER LABELS</text>
+    <rect x="48" y="680" width="182" height="48" rx="13" fill="#93e7a6"/><text x="139" y="711" text-anchor="middle" fill="#10221c" font-size="17" font-weight="800">YOU</text>
+    <text x="268" y="710" text-anchor="middle" class="muted" font-size="13" font-weight="800">VS</text>
+    <rect x="306" y="680" width="182" height="48" rx="13" fill="#f7b986"/><text x="397" y="711" text-anchor="middle" fill="#281a15" font-size="17" font-weight="800">OPP</text>
+    <text x="268" y="756" text-anchor="middle" class="muted" font-size="14">Selected: <tspan fill="#a1efaf" font-weight="700">You / Opp</tspan></text>
+    <text x="268" y="820" text-anchor="middle" class="muted" font-size="14">Keeps today’s familiar labels</text>
+  </g>
+
+  <g transform="translate(602 130)">
+    <rect width="536" height="870" rx="28" fill="#192128" stroke="#2c3940"/>
+    <text x="268" y="48" text-anchor="middle" class="main" font-size="25">B · Home / Visitor</text>
+    <text x="268" y="78" text-anchor="middle" class="muted" font-size="15">Neutral labels for two-sided matches</text>
+    <g transform="translate(13 98)">
+      <circle cx="255" cy="255" r="255" fill="url(#bezel)" stroke="#90999e" stroke-width="2"/>
+      <circle cx="255" cy="255" r="241" fill="url(#face)" stroke="#070d0f" stroke-width="3"/>
+      <text x="255" y="95" text-anchor="middle" class="tiny" font-size="14">BEST OF 3 · SET 2</text>
+      <circle cx="97" cy="126" r="9" fill="#b8ef67"/>
+      <text x="117" y="133" class="main" font-size="20">HOME  3</text>
+      <text x="411" y="133" text-anchor="end" class="main" font-size="20">VISITOR  2</text>
+      <rect x="76" y="147" width="358" height="92" rx="38" fill="#93e7a6"/>
+      <text x="255" y="187" text-anchor="middle" fill="#10221c" font-size="30" font-weight="850">HOME  +</text>
+      <text x="255" y="218" text-anchor="middle" fill="#234337" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="162" y="226" width="186" height="48" rx="24" fill="#11171a" stroke="#6d7778"/>
+      <text x="255" y="259" text-anchor="middle" class="score">30–0</text>
+      <rect x="76" y="262" width="358" height="92" rx="38" fill="#f7b986"/>
+      <text x="255" y="302" text-anchor="middle" fill="#281a15" font-size="30" font-weight="850">VISITOR  +</text>
+      <text x="255" y="333" text-anchor="middle" fill="#4b3023" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="178" y="371" width="154" height="45" rx="23" fill="none" stroke="#9aa9ad"/>
+      <text x="255" y="400" text-anchor="middle" class="main" font-size="17" font-weight="750">↶  UNDO</text>
+    </g>
+    <rect x="27" y="630" width="482" height="150" rx="18" fill="#11191e" stroke="#33434a"/>
+    <text x="50" y="660" fill="#8fa29f" font-size="12" font-weight="800" letter-spacing="2">SETTINGS · PLAYER LABELS</text>
+    <rect x="48" y="680" width="182" height="48" rx="13" fill="#93e7a6"/><text x="139" y="711" text-anchor="middle" fill="#10221c" font-size="17" font-weight="800">HOME</text>
+    <text x="268" y="710" text-anchor="middle" class="muted" font-size="13" font-weight="800">VS</text>
+    <rect x="306" y="680" width="182" height="48" rx="13" fill="#f7b986"/><text x="397" y="711" text-anchor="middle" fill="#281a15" font-size="17" font-weight="800">VISITOR</text>
+    <text x="268" y="756" text-anchor="middle" class="muted" font-size="14">Selected: <tspan fill="#a1efaf" font-weight="700">Home / Visitor</tspan></text>
+    <text x="268" y="820" text-anchor="middle" class="muted" font-size="14">Good for club or court-side scoring</text>
+  </g>
+
+  <g transform="translate(1162 130)">
+    <rect width="536" height="870" rx="28" fill="#192128" stroke="#2c3940"/>
+    <text x="268" y="48" text-anchor="middle" class="main" font-size="25">C · A / B</text>
+    <text x="268" y="78" text-anchor="middle" class="muted" font-size="15">Compact and easy to scan</text>
+    <g transform="translate(13 98)">
+      <circle cx="255" cy="255" r="255" fill="url(#bezel)" stroke="#90999e" stroke-width="2"/>
+      <circle cx="255" cy="255" r="241" fill="url(#face)" stroke="#070d0f" stroke-width="3"/>
+      <text x="255" y="95" text-anchor="middle" class="tiny" font-size="14">BEST OF 3 · SET 2</text>
+      <circle cx="173" cy="126" r="9" fill="#b8ef67"/>
+      <text x="193" y="133" class="main" font-size="20">A  3</text>
+      <text x="367" y="133" text-anchor="end" class="main" font-size="20">B  2</text>
+      <rect x="76" y="147" width="358" height="92" rx="38" fill="#93e7a6"/>
+      <text x="255" y="187" text-anchor="middle" fill="#10221c" font-size="30" font-weight="850">A  +</text>
+      <text x="255" y="218" text-anchor="middle" fill="#234337" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="162" y="226" width="186" height="48" rx="24" fill="#11171a" stroke="#6d7778"/>
+      <text x="255" y="259" text-anchor="middle" class="score">30–0</text>
+      <rect x="76" y="262" width="358" height="92" rx="38" fill="#f7b986"/>
+      <text x="255" y="302" text-anchor="middle" fill="#281a15" font-size="30" font-weight="850">B  +</text>
+      <text x="255" y="333" text-anchor="middle" fill="#4b3023" font-size="12" font-weight="750" letter-spacing="1.5">TAP TO SCORE</text>
+      <rect x="178" y="371" width="154" height="45" rx="23" fill="none" stroke="#9aa9ad"/>
+      <text x="255" y="400" text-anchor="middle" class="main" font-size="17" font-weight="750">↶  UNDO</text>
+    </g>
+    <rect x="27" y="630" width="482" height="150" rx="18" fill="#11191e" stroke="#33434a"/>
+    <text x="50" y="660" fill="#8fa29f" font-size="12" font-weight="800" letter-spacing="2">SETTINGS · PLAYER LABELS</text>
+    <rect x="48" y="680" width="182" height="48" rx="13" fill="#93e7a6"/><text x="139" y="711" text-anchor="middle" fill="#10221c" font-size="17" font-weight="800">A</text>
+    <text x="268" y="710" text-anchor="middle" class="muted" font-size="13" font-weight="800">VS</text>
+    <rect x="306" y="680" width="182" height="48" rx="13" fill="#f7b986"/><text x="397" y="711" text-anchor="middle" fill="#281a15" font-size="17" font-weight="800">B</text>
+    <text x="268" y="756" text-anchor="middle" class="muted" font-size="14">Selected: <tspan fill="#a1efaf" font-weight="700">A / B</tspan></text>
+    <text x="268" y="820" text-anchor="middle" class="muted" font-size="14">Short labels leave more room</text>
+  </g>
+</svg>
