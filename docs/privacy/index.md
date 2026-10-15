@@ -4,9 +4,9 @@ title: Privacy Policy - Tennis Score for Wear OS
 
 # Privacy Policy for Tennis Score for Wear OS
 
-Effective date: September 26, 2026
+Effective date: September 30, 2026
 
-Tennis Score for Wear OS is an offline singles tennis scoring app. It does not require an account and does not contain advertising, analytics, or an internet connection.
+Tennis Score for Wear OS is an offline singles and doubles tennis scoring app. It does not require an account and does not contain advertising, analytics, or an internet connection.
 
 ## Information stored on your watch
 

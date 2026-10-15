@@ -1,10 +1,10 @@
 # Handoff: Tennis Score for Wear OS
 
-Snapshot: 2026-09-26. Workspace: `/Users/thephani/Workspace/thePhani/gitspace/tennis-scoring-wear-os`.
+Snapshot: 2026-09-27. Workspace: `/Users/thephani/Workspace/thePhani/gitspace/tennis-scoring-wear-os`.
 
 ## Current state
 
-The native Wear OS MVP scores offline singles matches, persists the point log, resumes and undoes points, derives service automatically, and stores completed results. Home Settings offers best of three or five and either a full deciding set or a 10-point match tiebreak. Each active match retains the format selected at its start. The scoring screen uses the selected B score-tap layout: set heading, completed-set strip, current game scores with the server ball, a large center panel split into tappable YOU and OPP point scores, and Undo. Tiebreak labels and the score pulse remain visible. The completed-set winner's game total is bold mint; the scorer's current game score briefly grows when a game is recorded. Individual point values come from `MatchScore.pointValue` so Compose has no scoring rules.
+The native Wear OS MVP scores offline singles and doubles team matches, persists the point log, resumes and undoes points, derives service automatically, and stores completed results. Home Settings offers Singles or Doubles, best of three or five, and either a full deciding set or a 10-point match tiebreak. Existing saved formats without a match type default to Singles; each active match retains the format selected at its start. In Doubles, YOU and OPP are teams and the serving indicator identifies the team, not an individual partner. The scoring screen uses the selected B score-tap layout: set heading, completed-set strip, current game scores with the serving-side ball, a large center panel split into tappable YOU and OPP point scores, and Undo. Tiebreak labels and the score pulse remain visible. The completed-set winner's game total is bold mint; the scorer's current game score briefly grows when a game is recorded. Individual point values come from `MatchScore.pointValue` so Compose has no scoring rules.
 
 The Play listing title is **Tennis Score for Wear OS**. The permanent Android application ID is `com.thephani.tennisscore`; the Kotlin namespace remains `com.example.tennisscore`. The score screen is responsive on 192 dp and 227 dp round emulators, and its Undo, menu actions, settings choices, and match-complete actions are at least 48 dp high. Menu, settings, and completion pages scroll to reach lower actions.
 

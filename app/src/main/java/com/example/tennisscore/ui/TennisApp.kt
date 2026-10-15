@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,6 +59,7 @@ import com.example.tennisscore.data.SavedMatch
 import com.example.tennisscore.R
 import com.example.tennisscore.domain.MatchScore
 import com.example.tennisscore.domain.MatchFormat
+import com.example.tennisscore.domain.MatchType
 import com.example.tennisscore.domain.MatchLength
 import com.example.tennisscore.domain.DecidingSet
 import com.example.tennisscore.domain.Player
@@ -113,7 +116,7 @@ fun TennisScreen(
                     title = "TENNIS SCORE",
                     subtitle = formatSummary(saved?.defaultFormat ?: MatchFormat()),
                     actions = listOf(
-                        Action("START MATCH") { onShow(Page.SELECT_SERVER_NEW) },
+                        Action("START MATCH", "START") { onShow(Page.SELECT_SERVER_NEW) },
                         Action("HISTORY") { onShow(Page.HISTORY) },
                         Action("SETTINGS") { onShow(Page.SETTINGS) },
                         Action("PRIVACY") { onShow(Page.PRIVACY) },
@@ -160,7 +163,7 @@ fun TennisScreen(
                     }
                 } ?: Label("Loading…", 16)
                 Page.COMPLETE -> saved?.score?.let { score ->
-                    CompleteScreen(score, { onShow(Page.SELECT_SERVER_NEW) }, onUndo) { onShow(Page.START) }
+                    CompleteScreen(score, onUndo) { onShow(Page.START) }
                 } ?: Label("Loading…", 16)
                 Page.HISTORY -> HistoryScreen(saved?.history.orEmpty()) { onShow(Page.START) }
             }
@@ -196,7 +199,7 @@ private fun PrivacyScreen(onBack: () -> Unit) {
     }
 }
 
-private data class Action(val label: String, val onClick: () -> Unit)
+private data class Action(val label: String, val displayLabel: String = label, val onClick: () -> Unit)
 
 @Composable
 private fun FirstServerMenu(subtitle: String, onChoose: (Player) -> Unit, onCancel: () -> Unit) {
@@ -204,90 +207,194 @@ private fun FirstServerMenu(subtitle: String, onChoose: (Player) -> Unit, onCanc
         title = "FIRST SERVER",
         subtitle = subtitle,
         actions = listOf(
-            Action("YOU SERVE FIRST") { onChoose(Player.YOU) },
-            Action("OPP SERVES FIRST") { onChoose(Player.OPPONENT) },
-            Action("CANCEL", onCancel),
+            Action("YOU SERVE FIRST", "YOU") { onChoose(Player.YOU) },
+            Action("OPP SERVES FIRST", "OPP") { onChoose(Player.OPPONENT) },
+            Action("CANCEL") { onCancel() },
         ),
     )
 }
 
 @Composable
 private fun MenuScreen(title: String, subtitle: String, actions: List<Action>) {
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 14.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Label(title, if (title.length > 12) 16 else 19, bold = true, color = accent)
-        Spacer(Modifier.height(8.dp))
-        Label(subtitle, 12)
-        Spacer(Modifier.height(12.dp))
-        actions.forEach { action ->
-            ActionButton(action.label, action.onClick, if (actions.size >= 3) 0.82f else 1f)
-            Spacer(Modifier.height(6.dp))
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val rowWidth = maxWidth * 0.62f
+        val viewportHeight = maxHeight
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+            Column(
+                Modifier.fillMaxWidth().heightIn(min = viewportHeight)
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Label(title, if (title.length >= 12) 16 else 18, bold = true, color = accent)
+                Spacer(Modifier.height(4.dp))
+                Text(subtitle, color = Color.White, fontSize = 12.sp,
+                    textAlign = TextAlign.Center, maxLines = 2)
+                Spacer(Modifier.height(8.dp))
+                when (actions.size) {
+                    4 -> {
+                        actions.chunked(2).forEachIndexed { rowIndex, rowActions ->
+                            Row(Modifier.width(rowWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                rowActions.forEach { action ->
+                                    Box(Modifier.weight(1f)) {
+                                        ActionButton(action.label, action.onClick,
+                                            displayLabel = action.displayLabel, textSize = 10)
+                                    }
+                                }
+                            }
+                            if (rowIndex == 0) Spacer(Modifier.height(4.dp))
+                        }
+                    }
+                    3 -> {
+                        Row(Modifier.width(rowWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            actions.take(2).forEach { action ->
+                                Box(Modifier.weight(1f)) {
+                                    ActionButton(action.label, action.onClick,
+                                        displayLabel = action.displayLabel, textSize = 10)
+                                }
+                            }
+                        }
+                        Spacer(Modifier.height(4.dp))
+                        Box(Modifier.width(rowWidth * 0.58f)) {
+                            ActionButton(actions[2].label, actions[2].onClick, textSize = 10)
+                        }
+                    }
+                    else -> actions.forEachIndexed { index, action ->
+                        Box(Modifier.width(rowWidth)) {
+                            ActionButton(action.label, action.onClick,
+                                displayLabel = action.displayLabel, textSize = 10)
+                        }
+                        if (index < actions.lastIndex) Spacer(Modifier.height(4.dp))
+                    }
+                }
+            }
         }
     }
 }
 
-private fun formatSummary(format: MatchFormat): String =
-    "Best of ${format.length.sets} · " +
-        if (format.decidingSet == DecidingSet.FULL_SET) "Full set" else "Match TB"
+private fun formatSummary(format: MatchFormat): String {
+    val matchType = if (format.matchType == MatchType.SINGLES) "Singles" else "Doubles"
+    val decidingSet = if (format.decidingSet == DecidingSet.FULL_SET) "Full" else "MTB"
+    return "$matchType · BO${format.length.sets} · $decidingSet"
+}
 
 @Composable
 private fun SettingsScreen(initial: MatchFormat, onSave: (MatchFormat) -> Unit, onCancel: () -> Unit) {
     var draft by remember(initial) { mutableStateOf(initial) }
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Label("MATCH SETTINGS", 16, bold = true, color = accent)
-        Spacer(Modifier.height(9.dp))
-        Label("FORMAT", 10, bold = true, color = muted)
-        Label("Singles", 13, bold = true)
-        Spacer(Modifier.height(10.dp))
-        Label("MATCH LENGTH", 10, bold = true, color = muted)
-        Spacer(Modifier.height(5.dp))
-        SettingChoice("Best of 3", draft.length == MatchLength.BEST_OF_3) {
-            draft = draft.copy(length = MatchLength.BEST_OF_3)
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val actionWidth = maxWidth * 0.62f
+        val viewportHeight = maxHeight
+        Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+            Column(
+                Modifier.fillMaxWidth().heightIn(min = viewportHeight)
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Match\nSettings",
+                    modifier = Modifier.wrapContentWidth(),
+                    color = accent,
+                    fontSize = 16.sp,
+                    lineHeight = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    maxLines = 2,
+                )
+                Spacer(Modifier.height(9.dp))
+                Label("MATCH FORMAT", 10, bold = true, color = muted)
+                Spacer(Modifier.height(4.dp))
+                Row(Modifier.width(actionWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("Singles", draft.matchType == MatchType.SINGLES,
+                            displayLabel = "SINGLES") {
+                            draft = draft.copy(matchType = MatchType.SINGLES)
+                        }
+                    }
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("Doubles", draft.matchType == MatchType.DOUBLES,
+                            displayLabel = "DOUBLES") {
+                            draft = draft.copy(matchType = MatchType.DOUBLES)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                Label("MATCH LENGTH", 10, bold = true, color = muted)
+                Spacer(Modifier.height(4.dp))
+                Row(Modifier.width(actionWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("Best of 3", draft.length == MatchLength.BEST_OF_3,
+                            displayLabel = "3 SETS") {
+                            draft = draft.copy(length = MatchLength.BEST_OF_3)
+                        }
+                    }
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("Best of 5", draft.length == MatchLength.BEST_OF_5,
+                            displayLabel = "5 SETS") {
+                            draft = draft.copy(length = MatchLength.BEST_OF_5)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
+                Label("DECIDING SET", 10, bold = true, color = muted)
+                Spacer(Modifier.height(4.dp))
+                Row(Modifier.width(actionWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("Full deciding set", draft.decidingSet == DecidingSet.FULL_SET,
+                            displayLabel = "FULL SET") {
+                            draft = draft.copy(decidingSet = DecidingSet.FULL_SET)
+                        }
+                    }
+                    Box(Modifier.weight(1f)) {
+                        SettingChoice("10-point match tiebreak",
+                            draft.decidingSet == DecidingSet.MATCH_TIEBREAK_10,
+                            displayLabel = "10-PT TB") {
+                            draft = draft.copy(decidingSet = DecidingSet.MATCH_TIEBREAK_10)
+                        }
+                    }
+                }
+                Spacer(Modifier.height(5.dp))
+                Label(if (draft.decidingSet == DecidingSet.FULL_SET) "7-point TB at 6–6"
+                    else "At 1–1 / 2–2 · win by 2", 10, color = muted)
+                Spacer(Modifier.height(8.dp))
+                Row(Modifier.width(actionWidth), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Box(Modifier.weight(1f)) {
+                        ActionButton("SAVE SETTINGS", { onSave(draft) },
+                            displayLabel = "✓", textSize = 18)
+                    }
+                    Box(Modifier.weight(1f)) {
+                        ActionButton("CANCEL", onCancel, displayLabel = "×",
+                            textSize = 18, fillColor = opponentColor)
+                    }
+                }
+                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(12.dp))
+            }
         }
-        Spacer(Modifier.height(5.dp))
-        SettingChoice("Best of 5", draft.length == MatchLength.BEST_OF_5) {
-            draft = draft.copy(length = MatchLength.BEST_OF_5)
-        }
-        Spacer(Modifier.height(12.dp))
-        Label("DECIDING SET", 10, bold = true, color = muted)
-        Spacer(Modifier.height(5.dp))
-        SettingChoice("Full deciding set", draft.decidingSet == DecidingSet.FULL_SET) {
-            draft = draft.copy(decidingSet = DecidingSet.FULL_SET)
-        }
-        Spacer(Modifier.height(5.dp))
-        SettingChoice("10-point match tiebreak", draft.decidingSet == DecidingSet.MATCH_TIEBREAK_10) {
-            draft = draft.copy(decidingSet = DecidingSet.MATCH_TIEBREAK_10)
-        }
-        Spacer(Modifier.height(5.dp))
-        Label(if (draft.decidingSet == DecidingSet.FULL_SET) "7-point TB at 6–6"
-            else "At 1–1 / 2–2 · win by 2", 10, color = muted)
-        Spacer(Modifier.height(14.dp))
-        ActionButton("SAVE SETTINGS", { onSave(draft) })
-        Spacer(Modifier.height(6.dp))
-        ActionButton("CANCEL", onCancel)
-        Spacer(Modifier.height(18.dp))
     }
 }
 
 @Composable
-private fun SettingChoice(label: String, selected: Boolean, onClick: () -> Unit) {
-    val shape = RoundedCornerShape(16.dp)
+private fun SettingChoice(
+    label: String,
+    selected: Boolean,
+    displayLabel: String = label,
+    onClick: () -> Unit,
+) {
+    val shape = RoundedCornerShape(20.dp)
     Box(
-        Modifier.fillMaxWidth().height(48.dp).clip(shape)
-            .background(if (selected) youColor else Color(0xFF18272A))
-            .border(1.dp, if (selected) youColor else muted, shape)
-            .clickable(onClick = onClick).semantics { contentDescription = label },
+        Modifier.fillMaxWidth().height(48.dp).clickable(onClick = onClick)
+            .semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
-    ) { Label(if (selected) "✓  $label" else label, 11, bold = selected,
-        color = if (selected) ink else Color.White) }
+    ) {
+        Box(
+            Modifier.fillMaxWidth().height(40.dp).clip(shape)
+                .background(if (selected) youColor else Color(0xFF18272A))
+                .border(1.dp, if (selected) youColor else muted.copy(alpha = 0.45f), shape),
+            contentAlignment = Alignment.Center,
+        ) { Label(displayLabel, 10, bold = selected,
+            color = if (selected) ink else Color.White) }
+    }
 }
 
 @Composable
@@ -429,15 +536,27 @@ private fun ScoringScreen(score: MatchScore, firstServer: Player?, events: Strin
 
             Spacer(Modifier.height(screenHeight * 0.03f))
 
-            Box(
-                Modifier.fillMaxWidth(0.48f).height(48.dp)
-                    .clip(RoundedCornerShape(50)).border(1.dp, muted, RoundedCornerShape(50))
-                    .clickable(onClick = onUndo).semantics { contentDescription = "Undo last point" }
-                    .testTag("score:undo"),
-                contentAlignment = Alignment.Center,
-            ) { Label("↶  UNDO", 10, bold = true) }
+            UndoButton(onUndo)
             Spacer(Modifier.height(screenHeight * 0.065f))
         }
+    }
+}
+
+@Composable
+private fun UndoButton(onUndo: () -> Unit, modifier: Modifier = Modifier.fillMaxWidth(0.38f)) {
+    Box(
+        modifier.height(48.dp).clickable(onClick = onUndo)
+            .semantics { contentDescription = "Undo last point" }
+            .testTag("score:undo"),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            Modifier.clip(RoundedCornerShape(50)).background(Color(0xFF151B1E))
+                .border(1.dp, muted.copy(alpha = 0.45f), RoundedCornerShape(50))
+                .padding(horizontal = 10.dp, vertical = 4.dp)
+                .testTag("score:undo-visual"),
+            contentAlignment = Alignment.Center,
+        ) { Label("↶  UNDO", 9, bold = true, color = muted) }
     }
 }
 
@@ -511,56 +630,84 @@ private fun ScoreHalf(player: Player, value: String, hint: String, color: Color,
 @Composable
 private fun CompleteScreen(
     score: MatchScore,
-    onStart: () -> Unit,
     onUndo: () -> Unit,
     onHome: () -> Unit,
 ) {
     val isYouWinner = score.winner == Player.YOU
-    val finalScore = score.sets.joinToString("  ") { "${it.you}–${it.opponent}" } +
-        if (score.isMatchTieBreak) "  [${score.youPoints}–${score.opponentPoints}]" else ""
-    Column(
-        Modifier.fillMaxSize().background(background).verticalScroll(rememberScrollState())
-            .padding(horizontal = 18.dp, vertical = 12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Box(Modifier.fillMaxWidth(0.25f).height(2.dp).background(accent))
-        Spacer(Modifier.height(6.dp))
-        Label("MATCH COMPLETE", 11, bold = true, color = muted)
-        Spacer(Modifier.height(8.dp))
-        Label(if (isYouWinner) "YOU WIN" else "OPPONENT WINS",
-            if (isYouWinner) 25 else 19, bold = true, color = accent)
-        Spacer(Modifier.height(8.dp))
-        Label("FINAL SCORE", 9, bold = true, color = muted)
-        Label(finalScore,
-            when { score.sets.size >= 4 -> 10; score.sets.size == 3 || score.isMatchTieBreak -> 12; else -> 15 },
-            bold = true)
-        Spacer(Modifier.height(10.dp))
-        CompletionAction("NEW MATCH", onStart, Modifier.fillMaxWidth(0.80f).height(48.dp),
-            youColor, ink, 13)
-        Spacer(Modifier.height(6.dp))
-        CompletionAction("UNDO LAST POINT", onUndo, Modifier.fillMaxWidth(0.80f).height(48.dp),
-            Color(0xFF283034), opponentColor, 10)
-        Spacer(Modifier.height(6.dp))
-        CompletionAction("HOME", onHome, Modifier.fillMaxWidth(0.55f).height(48.dp),
-            background, muted, 10)
-        Spacer(Modifier.height(24.dp))
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val actionWidth = maxWidth * 0.60f
+        val undoWidth = maxWidth * 0.38f
+        Column(
+            Modifier.fillMaxSize().background(background).verticalScroll(rememberScrollState())
+                .padding(horizontal = 18.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(Modifier.fillMaxWidth(0.25f).height(2.dp).background(accent))
+            Spacer(Modifier.height(6.dp))
+            Label("MATCH COMPLETE", 11, bold = true, color = muted)
+            Spacer(Modifier.height(8.dp))
+            Label(if (isYouWinner) "YOU WIN" else "OPPONENT WINS",
+                if (isYouWinner) 25 else 19, bold = true, color = accent)
+            Spacer(Modifier.height(8.dp))
+            FinalScoreTable(score)
+            Spacer(Modifier.height(10.dp))
+            UndoButton(onUndo, Modifier.width(undoWidth))
+            Spacer(Modifier.height(4.dp))
+            Box(Modifier.width(actionWidth)) {
+                ActionButton("HOME", onHome, textSize = 10)
+            }
+            Spacer(Modifier.height(12.dp))
+        }
     }
 }
 
 @Composable
-private fun CompletionAction(
-    label: String,
-    onClick: () -> Unit,
-    modifier: Modifier,
-    fill: Color,
-    textColor: Color,
-    textSize: Int,
-) {
-    Box(
-        modifier.clip(RoundedCornerShape(50)).background(fill).clickable(onClick = onClick)
-            .semantics { contentDescription = label },
-        contentAlignment = Alignment.Center,
-    ) { Label(label, textSize, bold = true, color = textColor) }
+private fun FinalScoreTable(score: MatchScore) {
+    val columnCount = score.sets.size + if (score.isMatchTieBreak) 1 else 0
+    Column(
+        Modifier.fillMaxWidth(if (columnCount >= 4) 0.90f else 0.76f)
+            .clip(RoundedCornerShape(14.dp)).background(Color(0xFF24322F))
+            .padding(horizontal = 8.dp, vertical = 5.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        if (score.isMatchTieBreak) {
+            Row(Modifier.fillMaxWidth().height(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.width(28.dp))
+                score.sets.forEach { _ -> Spacer(Modifier.weight(1f)) }
+                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    Label("MTB", 8, bold = true, color = muted)
+                }
+            }
+        }
+        listOf(Player.YOU, Player.OPPONENT).forEach { player ->
+            val setValues = score.sets.map { it.games(player) }
+            val matchTieBreakPoints = if (player == Player.YOU) score.youPoints else score.opponentPoints
+            val description = "${if (player == Player.YOU) "You" else "Opponent"} final scores: " +
+                setValues.joinToString(", ") +
+                if (score.isMatchTieBreak) ", MTB $matchTieBreakPoints" else ""
+            val rowColor = if (score.winner == player) accent else Color.White
+            Row(
+                Modifier.fillMaxWidth().height(19.dp)
+                    .semantics(mergeDescendants = true) { contentDescription = description },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(Modifier.width(28.dp), contentAlignment = Alignment.CenterStart) {
+                    Label(if (player == Player.YOU) "YOU" else "OPP", 9,
+                        bold = true, color = rowColor)
+                }
+                setValues.forEach { value ->
+                    Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                        Label(value.toString(), 11, bold = true, color = rowColor)
+                    }
+                }
+                if (score.isMatchTieBreak) {
+                    Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                        Label(matchTieBreakPoints.toString(), 11, bold = true, color = rowColor)
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -570,7 +717,16 @@ private fun HistoryScreen(history: List<MatchResult>, onHome: () -> Unit) {
             .padding(horizontal = 18.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Label("MATCH HISTORY", 16, bold = true, color = accent)
+        Text(
+            text = "Match\nHistory",
+            modifier = Modifier.wrapContentWidth(),
+            color = accent,
+            fontSize = 16.sp,
+            lineHeight = 18.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            maxLines = 2,
+        )
         Spacer(Modifier.height(5.dp))
         if (history.isEmpty()) Label("No completed matches", 12)
         history.forEach { result ->
@@ -584,13 +740,19 @@ private fun HistoryScreen(history: List<MatchResult>, onHome: () -> Unit) {
 }
 
 @Composable
-private fun ActionButton(label: String, onClick: () -> Unit, widthFraction: Float = 1f) {
+private fun ActionButton(label: String, onClick: () -> Unit, widthFraction: Float = 1f,
+    displayLabel: String = label, textSize: Int = 12, fillColor: Color = youColor) {
     Box(
-        Modifier.fillMaxWidth(widthFraction).height(48.dp).clip(RoundedCornerShape(24.dp))
-            .background(youColor).clickable(onClick = onClick)
+        Modifier.fillMaxWidth().height(48.dp).clickable(onClick = onClick)
             .semantics { contentDescription = label },
         contentAlignment = Alignment.Center,
-    ) { Label(label, 12, bold = true, color = ink) }
+    ) {
+        Box(
+            Modifier.fillMaxWidth(widthFraction).height(40.dp)
+                .clip(RoundedCornerShape(20.dp)).background(fillColor),
+            contentAlignment = Alignment.Center,
+        ) { Label(displayLabel, textSize, bold = true, color = ink) }
+    }
 }
 
 @Composable

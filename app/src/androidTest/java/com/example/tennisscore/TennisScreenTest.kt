@@ -77,22 +77,31 @@ class TennisScreenTest {
     @Test fun settingsSaveAppliesToNextMatch() {
         launch()
         rule.onNodeWithContentDescription("SETTINGS").performClick()
-        rule.onNodeWithText("Singles").assertExists()
+        rule.onNodeWithContentDescription("Doubles").performClick()
         rule.onNodeWithContentDescription("Best of 5").performClick()
         rule.onNodeWithContentDescription("10-point match tiebreak").performScrollTo().performClick()
         rule.onNodeWithContentDescription("SAVE SETTINGS").performScrollTo().performClick()
-        rule.onNodeWithText("Best of 5 · Match TB").assertExists()
+        rule.onNodeWithText("Doubles · BO5 · MTB").assertExists()
         rule.onNodeWithContentDescription("START MATCH").performClick()
         rule.onNodeWithContentDescription("YOU SERVE FIRST").performClick()
         rule.onNodeWithText("SET 1 OF 5").assertExists()
     }
 
+    @Test fun settingsShowsWrappedTitleAndMatchTypeChoices() {
+        launch(initialPage = Page.SETTINGS)
+        rule.onNodeWithText("Match\nSettings").assertExists()
+        assertInsideRoundDisplay("Match\nSettings", text = true)
+        rule.onNodeWithContentDescription("Singles").assertExists()
+        rule.onNodeWithContentDescription("Doubles").assertExists()
+    }
+
     @Test fun settingsCancelDiscardsChanges() {
         launch()
         rule.onNodeWithContentDescription("SETTINGS").performClick()
+        rule.onNodeWithContentDescription("Doubles").performClick()
         rule.onNodeWithContentDescription("Best of 5").performClick()
         rule.onNodeWithContentDescription("CANCEL").performScrollTo().performClick()
-        rule.onNodeWithText("Best of 3 · Full set").assertExists()
+        rule.onNodeWithText("Singles · BO3 · Full").assertExists()
     }
 
     @Test fun privacyIsReachableFromHomeAndReturnsHome() {
@@ -283,6 +292,21 @@ class TennisScreenTest {
         rule.onNodeWithText("YOU WIN").assertExists()
     }
 
+    @Test fun completedMatchShowsSetScoresByPlayer() {
+        launch(initial = "Y".repeat(48), initialPage = Page.COMPLETE)
+        rule.onNodeWithContentDescription("You final scores: 6, 6").assertExists()
+        rule.onNodeWithContentDescription("Opponent final scores: 0, 0").assertExists()
+    }
+
+    @Test fun completedMatchShowsDecidingMatchTiebreakColumn() {
+        launch(initial = "Y".repeat(24) + "O".repeat(24) + "Y".repeat(10),
+            initialPage = Page.COMPLETE,
+            format = MatchFormat(decidingSet = DecidingSet.MATCH_TIEBREAK_10))
+        rule.onNodeWithText("MTB").assertExists()
+        rule.onNodeWithContentDescription("You final scores: 6, 0, MTB 10").assertExists()
+        rule.onNodeWithContentDescription("Opponent final scores: 0, 6, MTB 0").assertExists()
+    }
+
     @Test fun resumePersistedMatch() {
         launch(initial = "Y", initialPage = Page.RESUME, server = Player.YOU)
         rule.onNodeWithContentDescription("RESUME").performClick()
@@ -291,7 +315,7 @@ class TennisScreenTest {
 
     @Test fun undoMatchCompletionReturnsToScoring() {
         launch(initial = "Y".repeat(48), initialPage = Page.COMPLETE, server = Player.YOU)
-        rule.onNodeWithContentDescription("UNDO LAST POINT").performClick()
+        rule.onNodeWithContentDescription("Undo last point").performScrollTo().performClick()
         rule.onNodeWithContentDescription("Score point for You").assertExists()
     }
 
@@ -364,6 +388,17 @@ class TennisScreenTest {
         assertWatchSizedTouchTarget("Undo last point")
     }
 
+    @Test fun scoreUndoUsesCompactVisualWithinAccessibleTouchTarget() {
+        launch(initialPage = Page.SCORE)
+        val target = rule.onNodeWithTag("score:undo").fetchSemanticsNode().boundsInRoot
+        val visual = rule.onNodeWithTag("score:undo-visual", useUnmergedTree = true)
+            .fetchSemanticsNode().boundsInRoot
+
+        assertTrue("UNDO visual should be shorter than its touch target", visual.height < target.height)
+        assertTrue("UNDO visual should remain comfortably visible", visual.height >= target.height * 0.35f)
+        assertTrue("UNDO visual should not span the full touch target", visual.width < target.width)
+    }
+
     @Test fun homeActionsHaveWatchSizedTouchTargets() {
         launch()
         listOf("START MATCH", "HISTORY", "SETTINGS", "PRIVACY").forEach {
@@ -371,10 +406,83 @@ class TennisScreenTest {
         }
     }
 
+    @Test fun homeMenuFitsInsideRoundDisplayWithoutScrolling() {
+        launch()
+        assertInsideRoundDisplay("TENNIS SCORE", text = true)
+        listOf("START MATCH", "HISTORY", "SETTINGS", "PRIVACY").forEach {
+            assertInsideRoundDisplay(it)
+        }
+    }
+
+    @Test fun historyTitleWrapsIntoTwoLinesInsideRoundDisplay() {
+        launch(initialPage = Page.HISTORY)
+        rule.onNodeWithText("Match\nHistory").assertExists()
+        assertInsideRoundDisplay("Match\nHistory", text = true)
+    }
+
+    @Test fun firstServerMenuFitsInsideRoundDisplayWithoutScrolling() {
+        launch()
+        rule.onNodeWithContentDescription("START MATCH").performClick()
+        assertInsideRoundDisplay("FIRST SERVER", text = true)
+        listOf("YOU SERVE FIRST", "OPP SERVES FIRST", "CANCEL").forEach {
+            assertInsideRoundDisplay(it)
+        }
+    }
+
+    private fun assertInsideRoundDisplay(value: String, text: Boolean = false) {
+        val root = rule.onRoot().fetchSemanticsNode().boundsInRoot
+        val target = if (text) rule.onNodeWithText(value).fetchSemanticsNode().boundsInRoot
+            else rule.onNodeWithContentDescription(value).fetchSemanticsNode().boundsInRoot
+        val radius = minOf(root.width, root.height) / 2f
+        for (x in listOf(target.left, target.right)) {
+            for (y in listOf(target.top, target.bottom)) {
+                assertTrue("$value must fit inside the round watch without scrolling; root=$root target=$target",
+                    hypot(x - root.center.x, y - root.center.y) <= radius)
+            }
+        }
+    }
+
     @Test fun settingsChoicesHaveWatchSizedTouchTargets() {
         launch(initialPage = Page.SETTINGS)
-        listOf("Best of 3", "Best of 5", "Full deciding set", "10-point match tiebreak")
+        listOf("Singles", "Doubles", "Best of 3", "Best of 5", "Full deciding set",
+            "10-point match tiebreak")
             .forEach { assertWatchSizedTouchTarget(it, scroll = true) }
+    }
+
+    @Test fun settingsChoiceWidthMatchesHomeMenuAction() {
+        launch()
+        val homeActionWidth = rule.onNodeWithContentDescription("START MATCH")
+            .fetchSemanticsNode().boundsInRoot.width
+        rule.onNodeWithContentDescription("SETTINGS").performClick()
+        val settingChoiceWidth = rule.onNodeWithContentDescription("Best of 3")
+            .fetchSemanticsNode().boundsInRoot.width
+
+        assertTrue("Settings choice width $settingChoiceWidth should match Home action width $homeActionWidth",
+            kotlin.math.abs(settingChoiceWidth - homeActionWidth) <= 2f)
+    }
+
+    @Test fun settingsActionsUseIconsWithAccessibleNames() {
+        launch(initialPage = Page.SETTINGS)
+        rule.onNodeWithContentDescription("SAVE SETTINGS").assertExists()
+        rule.onNodeWithContentDescription("CANCEL").assertExists()
+        rule.onNodeWithText("✓").assertExists()
+        rule.onNodeWithText("×").assertExists()
+    }
+
+    @Test fun settingsShowsSetCountsInsteadOfAbbreviations() {
+        launch(initialPage = Page.SETTINGS)
+        rule.onNodeWithText("3 sets", substring = true, ignoreCase = true).assertExists()
+        rule.onNodeWithText("5 sets", substring = true, ignoreCase = true).assertExists()
+    }
+
+    @Test fun selectedSettingsChoicesUseColorWithoutCheckmarkPrefix() {
+        launch(initialPage = Page.SETTINGS)
+        rule.onNodeWithText("3 SETS").assertExists()
+        rule.onNodeWithText("FULL SET").assertExists()
+        rule.onNodeWithContentDescription("Best of 5").performClick()
+        rule.onNodeWithContentDescription("10-point match tiebreak").performScrollTo().performClick()
+        rule.onNodeWithText("5 SETS").assertExists()
+        rule.onNodeWithText("10-PT TB").assertExists()
     }
 
     private fun assertWatchSizedTouchTarget(description: String, scroll: Boolean = false) {
@@ -406,7 +514,9 @@ class TennisScreenTest {
 
     @Test fun matchCompleteActionsHaveWatchSizedTouchTargets() {
         launch(initial = "Y".repeat(48), initialPage = Page.COMPLETE)
-        listOf("NEW MATCH", "UNDO LAST POINT", "HOME").forEach {
+        rule.onNodeWithContentDescription("NEW MATCH").assertDoesNotExist()
+        rule.onNodeWithTag("score:undo-visual", useUnmergedTree = true).assertExists()
+        listOf("Undo last point", "HOME").forEach {
             assertWatchSizedTouchTarget(it, scroll = true)
         }
     }

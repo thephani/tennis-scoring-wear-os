@@ -11,6 +11,7 @@ import com.example.tennisscore.domain.MatchScore
 import com.example.tennisscore.domain.MatchFormat
 import com.example.tennisscore.domain.MatchLength
 import com.example.tennisscore.domain.DecidingSet
+import com.example.tennisscore.domain.MatchType
 import com.example.tennisscore.domain.Player
 import com.example.tennisscore.domain.ScoringEngine
 import kotlinx.coroutines.flow.Flow
@@ -57,17 +58,21 @@ class MatchRepository(context: Context) {
     private val startedKey = longPreferencesKey("started_at")
     private val historyKey = stringSetPreferencesKey("history")
     private val firstServerKey = stringPreferencesKey("first_server")
+    private val settingsMatchTypeKey = stringPreferencesKey("settings_match_type")
     private val settingsLengthKey = stringPreferencesKey("settings_match_length")
     private val settingsDecidingKey = stringPreferencesKey("settings_deciding_set")
+    private val activeMatchTypeKey = stringPreferencesKey("active_match_type")
     private val activeLengthKey = stringPreferencesKey("active_match_length")
     private val activeDecidingKey = stringPreferencesKey("active_deciding_set")
 
     private fun formatOf(preferences: Preferences, lengthKey: Preferences.Key<String>,
-        decidingKey: Preferences.Key<String>): MatchFormat = MatchFormat(
+        decidingKey: Preferences.Key<String>, matchTypeKey: Preferences.Key<String>): MatchFormat = MatchFormat(
         length = MatchLength.entries.firstOrNull { it.name == preferences[lengthKey] }
             ?: MatchLength.BEST_OF_3,
         decidingSet = DecidingSet.entries.firstOrNull { it.name == preferences[decidingKey] }
             ?: DecidingSet.FULL_SET,
+        matchType = MatchType.entries.firstOrNull { it.name == preferences[matchTypeKey] }
+            ?: MatchType.SINGLES,
     )
 
     val state: Flow<SavedMatch> = store.data.map { preferences ->
@@ -78,13 +83,15 @@ class MatchRepository(context: Context) {
                 .sortedByDescending { it.id },
             firstServer = preferences[firstServerKey]?.singleOrNull()
                 ?.let { runCatching { Player.fromCode(it) }.getOrNull() },
-            format = formatOf(preferences, activeLengthKey, activeDecidingKey),
-            defaultFormat = formatOf(preferences, settingsLengthKey, settingsDecidingKey),
+            format = formatOf(preferences, activeLengthKey, activeDecidingKey, activeMatchTypeKey),
+            defaultFormat = formatOf(preferences, settingsLengthKey, settingsDecidingKey,
+                settingsMatchTypeKey),
         )
     }
 
     suspend fun saveSettings(format: MatchFormat) {
         store.edit { preferences ->
+            preferences[settingsMatchTypeKey] = format.matchType.name
             preferences[settingsLengthKey] = format.length.name
             preferences[settingsDecidingKey] = format.decidingSet.name
         }
@@ -95,7 +102,9 @@ class MatchRepository(context: Context) {
         store.edit { preferences ->
             preferences[activeKey] = ""
             preferences[firstServerKey] = firstServer.code.toString()
-            val format = formatOf(preferences, settingsLengthKey, settingsDecidingKey)
+            val format = formatOf(preferences, settingsLengthKey, settingsDecidingKey,
+                settingsMatchTypeKey)
+            preferences[activeMatchTypeKey] = format.matchType.name
             preferences[activeLengthKey] = format.length.name
             preferences[activeDecidingKey] = format.decidingSet.name
             startedAt = maxOf(System.currentTimeMillis(), (preferences[startedKey] ?: 0L) + 1L)
@@ -119,7 +128,7 @@ class MatchRepository(context: Context) {
         store.edit { preferences ->
             val events = preferences[activeKey] ?: return@edit
             val before = ScoringEngine.replay(events,
-                formatOf(preferences, activeLengthKey, activeDecidingKey))
+                formatOf(preferences, activeLengthKey, activeDecidingKey, activeMatchTypeKey))
             if (before.winner != null) return@edit
             val after = ScoringEngine.scorePoint(before, winner)
             preferences[activeKey] = events + winner.code
@@ -137,7 +146,7 @@ class MatchRepository(context: Context) {
             val events = preferences[activeKey] ?: return@edit
             if (events.isEmpty()) return@edit
             if (ScoringEngine.replay(events,
-                formatOf(preferences, activeLengthKey, activeDecidingKey)).winner != null) {
+                formatOf(preferences, activeLengthKey, activeDecidingKey, activeMatchTypeKey)).winner != null) {
                 val id = preferences[startedKey]
                 preferences[historyKey] = (preferences[historyKey] ?: emptySet())
                     .filterNot { MatchResult.decode(it)?.id == id }.toSet()

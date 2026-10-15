@@ -1,6 +1,6 @@
 # Tennis Score for Wear OS
 
-Offline singles scoring for best-of-three or best-of-five tennis. On **Home → Settings**, choose a full deciding set or a 10-point match tiebreak in place of that set. The default format applies to new matches; an active match keeps its format. Choose the first server, then the tennis ball tracks service automatically, including tiebreaks. Tap the **YOU** half of the large point score when you win a point, or the **OPP** half when your opponent wins it. The score screen shows completed set scores above the current game score, with the winning set total emphasized. The score panel pulses after a point; the scorer's current game score briefly grows when a game is recorded. **UNDO** removes the latest point.
+Offline singles and doubles team scoring for best-of-three or best-of-five tennis. On **Home → Settings**, choose Singles or Doubles, match length, and a full deciding set or 10-point match tiebreak. Defaults apply to new matches; each active match keeps the format selected when it began. In Doubles, **YOU** and **OPP** represent teams; the app tracks which team serves, not the individual partner's service order. Choose the first serving side, then the tennis ball tracks service automatically, including tiebreaks. Tap the **YOU** half of the large point score when your side wins a point, or the **OPP** half when the opposing side wins it. The score screen shows completed set scores above the current game score, with the winning set total emphasized. The score panel pulses after a point; the scorer's current game score briefly grows when a game is recorded. **UNDO** removes the latest point.
 
 ## Implementation
 
@@ -55,4 +55,4 @@ On watches with USB debugging, connect by USB and use the same `adb install` and
 
 ## MVP limits
 
-Singles only. The app tracks whose turn it is to serve, but not first/second serves, faults, or serve statistics. No names, doubles, phone companion, sharing, or cloud backup. History stores date, winner, set scores, and any deciding match tiebreak score; it does not retain a point-by-point archive after a new match starts. Swipe left is reserved by Wear OS navigation, so Undo is an explicit on-screen action.
+The app tracks which side is serving, but not first/second serves, faults, serve statistics, player names, or individual doubles service order. There is no phone companion, sharing, or cloud backup. History stores date, winner, set scores, and any deciding match tiebreak score; it does not retain a point-by-point archive after a new match starts. Swipe left is reserved by Wear OS navigation, so Undo is an explicit on-screen action.

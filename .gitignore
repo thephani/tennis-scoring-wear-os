@@ -52,3 +52,11 @@ Thumbs.db
 *.pem
 keystore.properties
 signing.properties
+
+
+
+// custom
+.ori
+bug/*
+design-options/*
+AGENTS.md

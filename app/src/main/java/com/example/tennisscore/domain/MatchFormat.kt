@@ -6,8 +6,10 @@ enum class MatchLength(val sets: Int, val setsToWin: Int) {
 }
 
 enum class DecidingSet { FULL_SET, MATCH_TIEBREAK_10 }
+enum class MatchType { SINGLES, DOUBLES }
 
 data class MatchFormat(
     val length: MatchLength = MatchLength.BEST_OF_3,
     val decidingSet: DecidingSet = DecidingSet.FULL_SET,
+    val matchType: MatchType = MatchType.SINGLES,
 )

@@ -7,6 +7,7 @@ import com.example.tennisscore.domain.Player
 import com.example.tennisscore.domain.MatchFormat
 import com.example.tennisscore.domain.MatchLength
 import com.example.tennisscore.domain.DecidingSet
+import com.example.tennisscore.domain.MatchType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -18,7 +19,7 @@ import org.junit.runner.RunWith
 class MatchRepositoryTest {
     @Test fun settingsApplyToNewMatchesWithoutChangingActiveMatch() = runBlocking {
         val repository = MatchRepository(InstrumentationRegistry.getInstrumentation().targetContext)
-        val custom = MatchFormat(MatchLength.BEST_OF_5, DecidingSet.MATCH_TIEBREAK_10)
+        val custom = MatchFormat(MatchLength.BEST_OF_5, DecidingSet.MATCH_TIEBREAK_10, MatchType.DOUBLES)
         val defaults = MatchFormat()
         try {
             repository.saveSettings(custom)
@@ -26,6 +27,7 @@ class MatchRepositoryTest {
             val first = repository.state.first { it.startedAt == firstId && it.events == "" }
             assertEquals(custom, first.format)
             assertEquals(custom, first.defaultFormat)
+
 
             repository.saveSettings(defaults)
             val unchanged = repository.state.first {
